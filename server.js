@@ -152,9 +152,10 @@ app.post('/deletecomment', (req,res) => {deletecomment.handleDeleteComment(req,r
 app.post('/synthesefiles', (req,res) => {synthesefiles.handleSyntheseFiles(req,res, db)})
 // app.get('/profile/:id', (req,res) => {profile.handleProfileGet(req,res, db)})
 
-app.listen(3000)
-// app.listen(process.env.PORT || 3000, ()=> {
-//   console.log(`app is running on port ${process.env.PORT}`);
-// })
+// app.listen(3000)
+app.listen(process.env.PORT || 3000, ()=> {
+  console.log(`app is running on port ${process.env.PORT || 3000}`);
+})
 
 console.log("hello")
+// console.log(process.env.PORT)
