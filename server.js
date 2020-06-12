@@ -38,7 +38,7 @@ const updatecomment = require('./controllers/updatecomment');
 const deletecomment = require('./controllers/deletecomment');
 const synthesefiles = require('./controllers/synthesefiles');
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0; 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 const db = require('knex')({
   client: 'pg',
   connection: {
@@ -101,7 +101,7 @@ app.use(cors());
 //   .catch(err => 'impossible de lire la database');
 // })
 app.get('/',(req,res)=>{
-  return db('utilisateur').count('id')
+  return db('utilisateurs').count('id')
   .then(data => res.json(data));
 })
 // app.get('/',(req,res)=>{
