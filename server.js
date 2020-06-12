@@ -91,19 +91,19 @@ app.use(express.json());
 app.use(cors());
 
 
-// app.get('/',(req,res)=>{
-//   res.send('this is working');
-// })
+app.get('/',(req,res)=>{
+  res.send('this is working');
+})
 
 // app.get('/',(req,res)=>{
 //   return db.select('*').from('utilisateurs')
 //   .then(data => res.json(data));
 // })
-app.get('/',(req,res)=>{
-  return db.select('*').from('utilisateurs')
-  .then(data => res.json(data))
-  .catch(err => 'impossible de lire la database');
-})
+// app.get('/',(req,res)=>{
+//   return db.select('*').from('utilisateurs')
+//   .then(data => res.json(data))
+//   .catch(err => 'impossible de lire la database');
+// })
 
 
 // app.get('/', (req,res)=>{
