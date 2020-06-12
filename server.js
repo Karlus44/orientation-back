@@ -1,0 +1,160 @@
+const express = require('express');
+const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
+const multer = require('multer');
+
+const firstuser = require('./controllers/firstuser');
+const register = require('./controllers/register');
+const testempty = require('./controllers/testempty');
+const delete_user = require('./controllers/delete_user');
+const delete_file = require('./controllers/delete_file');
+const copy_file = require('./controllers/copy_file');
+const signin = require('./controllers/signin');
+const display = require('./controllers/display');
+const displayfiles = require('./controllers/displayfiles');
+const displayfileseleve = require('./controllers/displayfileseleve');
+const displaynotifications = require('./controllers/displaynotifications');
+const displaycomments = require('./controllers/displaycomments');
+const displaycomments2 = require('./controllers/displaycomments2');
+const requests = require('./controllers/requests');
+const messageclasse = require('./controllers/messageclasse');
+const displayresp = require('./controllers/displayresp');
+const updateclass = require('./controllers/updateclass');
+const updateuser = require('./controllers/updateuser');
+const updatefile = require('./controllers/updatefile');
+const updateadminuser = require('./controllers/updateadminuser');
+const changepassword = require('./controllers/changepassword');
+const requestpassword = require('./controllers/requestpassword');
+const cancelrequest = require('./controllers/cancelrequest');
+const resetpassword = require('./controllers/resetpassword');
+const post = require('./controllers/post');
+const checkprofs = require('./controllers/checkprofs');
+const validechangements = require('./controllers/validechangements');
+const upload = require('./controllers/upload');
+// const openfile = require('./controllers/openfile');
+const notefile = require('./controllers/notefile');
+const addcomment = require('./controllers/addcomment');
+const updatecomment = require('./controllers/updatecomment');
+const deletecomment = require('./controllers/deletecomment');
+const synthesefiles = require('./controllers/synthesefiles');
+
+
+const db = require('knex')({
+  client: 'pg',
+  connection: {
+    // connectionString : process.env.DATABASE_URL,
+    // ssl: true,
+    host : '127.0.0.1',
+    user : 'karlus',
+    password : 'pass',
+    database : 'orientation-data'
+  }
+});
+
+const nodemailer = require('nodemailer');
+const creds = require('./config');
+
+var transport = {
+  host: 'smtp.mail.fr', // e.g. smtp.gmail.com
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: creds.USER,
+    pass: creds.PASS
+  }
+}
+
+
+
+var transporter = nodemailer.createTransport(transport)
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log(`L'envoi de messages fonctionne`);
+  }
+});
+
+
+
+const app = express();
+
+// db.select('*').from('utilisateurs').then(data => {
+//   console.log('utilisateurs');
+//   console.log(data);
+// });
+
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+
+
+// app.get('/',(req,res)=>{
+//   res.send('this is working');
+// })
+
+// app.get('/',(req,res)=>{
+//   return db.select('*').from('utilisateurs')
+//   .then(data => res.json(data));
+// })
+app.get('/',(req,res)=>{
+  return db.select('*').from('utilisateurs')
+  .then(data => res.json(data));
+})
+
+
+// app.get('/', (req,res)=>{
+//   // res.send('it is working !')
+//   return db.select('*').from('utilisateurs')
+//   .then(data => res.json(data));
+// })
+
+app.post('/signin', (req,res) => {signin.handleSignin(req,res, db, bcrypt)})
+app.post('/', (req,res) => {display.handleDisplay(req,res, db)})
+app.post('/requests', (req,res) => {requests.handleRequests(req,res, db)})
+app.post('/messageclasse', (req,res) => {messageclasse.handleMessageClasse(req,res, db)})
+app.post('/resp', (req,res) => {displayresp.handleDisplayResp(req,res, db)})
+app.post('/displaynotifications', (req,res) => {displaynotifications.handleDisplayNotifications(req,res, db)})
+app.post('/firstuser', (req,res) => {firstuser.handleFirstUser(req,res, db, bcrypt)})
+app.post('/register', (req,res) => {register.handleRegister(req,res, db, bcrypt)})
+app.get('/testempty', (req,res) => {testempty.handleTestEmpty(req,res, db)})
+app.post('/delete_user', (req,res) => {delete_user.handleDeleteUser(req,res, db)})
+app.post('/delete_file', (req,res) => {delete_file.handleDeleteFile(req,res, db)})
+app.post('/delete_folder', (req,res) => {delete_file.handleDeleteFolder(req,res)})
+app.post('/copy_file', (req,res) => {copy_file.handleCopyFile(req,res, db)})
+app.post('/copy_folder', (req,res) => {copy_file.handleCopyFolder(req,res)})
+app.post('/updateclass', (req,res) => {updateclass.handleUpdateClass(req,res, db)})
+app.post('/updateuser', (req,res) => {updateuser.handleUpdateUser(req,res, db)})
+app.post('/updatefile', (req,res) => {updatefile.handleUpdateFile(req,res, db)})
+app.post('/updateadminuser', (req,res) => {updateadminuser.handleUpdateAdminUser(req,res, db)})
+app.post('/changepassword', (req,res) => {changepassword.handleChangePassword(req,res, db, bcrypt)})
+app.post('/requestpassword', (req,res) => {requestpassword.handleRequestPassword(req,res, db, bcrypt)})
+app.post('/cancelrequest', (req,res) => {cancelrequest.handleCancelRequest(req,res, db)})
+app.post('/resetpassword', (req,res) => {resetpassword.handleResetPassword(req,res, db, bcrypt)})
+app.post('/send', (req, res) => {post.handlePost(req,res,transporter)})
+app.post('/checkprofs', (req, res) => {checkprofs.handleCheckProfs(req,res, db)})
+app.post('/upload', (req, res) => {upload.handleUpload(req,res, db, multer)})
+app.post('/displayfiles', (req, res) => {displayfiles.handleDisplayFiles(req,res, db)})
+app.post('/displayfileseleve', (req, res) => {displayfileseleve.handleDisplayFilesEleve(req,res, db)})
+app.post('/displaycomments', (req, res) => {displaycomments.handleDisplayComments(req,res, db)})
+app.post('/displaycomments2', (req, res) => {displaycomments2.handleDisplayComments2(req,res, db)})
+app.post('/validechangements', (req, res) => {
+                                              validechangements.handleSendNotifs(req,res,db);
+                                              validechangements.handleValideChangements(req,res, db);
+                                            })
+// app.post('/openfile', (req, res) => {openfile.handleOpenFile(req,res)})
+app.post('/notefile', (req, res) => {notefile.handleNoteFile(req,res,db)})
+app.post('/addcomment', (req,res) => {addcomment.handleAddComment(req,res, db)})
+app.post('/updatecomment', (req,res) => {updatecomment.handleUpdateComment(req,res, db)})
+app.post('/deletecomment', (req,res) => {deletecomment.handleDeleteComment(req,res, db)})
+app.post('/synthesefiles', (req,res) => {synthesefiles.handleSyntheseFiles(req,res, db)})
+// app.get('/profile/:id', (req,res) => {profile.handleProfileGet(req,res, db)})
+
+app.listen(3000)
+// app.listen(process.env.PORT || 3000, ()=> {
+//   console.log(`app is running on port ${process.env.PORT}`);
+// })
+
+console.log("hello")
