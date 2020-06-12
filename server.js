@@ -91,14 +91,26 @@ app.use(express.json());
 app.use(cors());
 
 
-app.get('/',(req,res)=>{
-  res.send('this is working');
-})
-
 // app.get('/',(req,res)=>{
-//   return db.select('*').from('utilisateurs')
-//   .then(data => res.json(data));
+//   res.send('this is working');
 // })
+
+app.get('/',(req,res)=>{
+  return db.select('*').from('utilisateurs')
+  .then(data => res.json(data));
+})
+app.get('/',(req,res)=>{
+  return db.select('*').from('fichiers')
+  .then(data => res.json(data));
+})
+app.get('/',(req,res)=>{
+  return db.select('*').from('commentaires')
+  .then(data => res.json(data));
+})
+app.get('/',(req,res)=>{
+  return db.select('*').from('partages')
+  .then(data => res.json(data));
+})
 // app.get('/',(req,res)=>{
 //   return db.select('*').from('utilisateurs')
 //   .then(data => res.json(data))
