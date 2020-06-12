@@ -42,12 +42,12 @@ const synthesefiles = require('./controllers/synthesefiles');
 const db = require('knex')({
   client: 'pg',
   connection: {
-    // connectionString : process.env.DATABASE_URL,
-    // ssl: true,
-    host : '127.0.0.1',
-    user : 'karlus',
-    password : 'pass',
-    database : 'orientation-data'
+    connectionString : process.env.DATABASE_URL,
+    ssl: true
+    // host : '127.0.0.1',
+    // user : 'karlus',
+    // password : 'pass',
+    // database : 'orientation-data'
   }
 });
 
@@ -91,14 +91,14 @@ app.use(express.json());
 app.use(cors());
 
 
-app.get('/',(req,res)=>{
-  res.send('this is working');
-})
-
 // app.get('/',(req,res)=>{
-//   return db.select('*').from('utilisateurs')
-//   .then(data => res.json(data));
+//   res.send('this is working');
 // })
+
+app.get('/',(req,res)=>{
+  return db.select('*').from('utilisateurs')
+  .then(data => res.json(data));
+})
 // app.get('/',(req,res)=>{
 //   return db.select('*').from('utilisateurs')
 //   .then(data => res.json(data))
