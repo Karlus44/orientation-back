@@ -82,7 +82,8 @@ exports.up = function(knex) {
     t.string('classe',20);
     t.string('contenu',5000);
     t.string('type',5);
-    t.integer('file')
+    t.integer('file');
+    t.integer('user_id').notNullable().references('id').inTable('utilisateurs').onUpdate('CASCADE').onDelete('CASCADE');
     t.timestamp('created_at').defaultTo(knex.fn.now());
 
 })

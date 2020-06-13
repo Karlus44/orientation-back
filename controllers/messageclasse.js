@@ -4,6 +4,12 @@ const handleMessageClasse = (req,res,db)=> {
   const { prénom, nom, mail, resp, message } = req.body;
   const list = Object.keys(resp);
   console.log(list);
+
+  db.select('*').from('utilisateurs').where({ mail: mail })
+      .then(user=> user[0].id)
+      .then(x => {
+
+
   list.map(elt => {
     db.insert({
                    prénom: prénom,
@@ -12,6 +18,7 @@ const handleMessageClasse = (req,res,db)=> {
                    mail: mail,
                    contenu: prénom + ' ' + nom + ' a envoyé un message: ' + message,
                    type: 'm',
+                   user_id: x,
                  })
                  .into('commentaires')
                  .returning('*')
@@ -27,6 +34,11 @@ const handleMessageClasse = (req,res,db)=> {
                    message: `Un problème est survenu. Le message n'a pas pu être envoyé`
                  }))
   })
+})
+.catch(err => res.status(400).json({
+  status:'e',
+  message: `Un problème est survenu. Le message n'a pas pu être envoyé`
+}))
 
 }
 
