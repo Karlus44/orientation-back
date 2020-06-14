@@ -91,7 +91,8 @@ app.use(express.json());
 
 var corsOptions = {
   origin: 'https://orientation-front.herokuapp.com',
-  allowedHeaders: 'Content-Type'
+  methods: 'GET,POST',
+  allowedHeaders: 'Content-Type',
   optionsSuccessStatus: 200
 }
 
