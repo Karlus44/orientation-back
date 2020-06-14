@@ -90,7 +90,7 @@ app.use(express.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 var corsOptions = {
-  origin: 'https://git.heroku.com/orientation-front.git',
+  origin: 'https://orientation-front.herokuapp.com',
   allowedHeaders: 'Content-Type'
   optionsSuccessStatus: 200
 }
