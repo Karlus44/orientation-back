@@ -97,7 +97,7 @@ var corsOptions = {
 }
 
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 
 // app.get('/',(req,res)=>{
