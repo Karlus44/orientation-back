@@ -88,6 +88,14 @@ const app = express();
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
+
+var corsOptions = {
+  origin: 'https://git.heroku.com/orientation-front.git',
+  allowedHeaders: 'Content-Type'
+  optionsSuccessStatus: 200
+}
+
+
 app.use(cors());
 
 
