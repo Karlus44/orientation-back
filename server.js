@@ -64,7 +64,7 @@ var transport = {
   }
 }
 
-
+console.log(creds.USER,creds.PASS);
 
 var transporter = nodemailer.createTransport(transport)
 
