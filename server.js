@@ -64,7 +64,7 @@ var transport = {
   }
 }
 
-
+console.log(auth);
 var transporter = nodemailer.createTransport(transport)
 
 transporter.verify((error, success) => {
