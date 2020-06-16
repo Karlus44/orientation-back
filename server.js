@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const multer = require('multer');
+app.use(cors());
 
 const firstuser = require('./controllers/firstuser');
 const register = require('./controllers/register');
@@ -95,7 +96,7 @@ var corsOptions = {
 }
 
 
-app.use(cors());
+// app.use(cors());
 // app.options('*', cors(corsOptions));
 
 
