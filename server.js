@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const multer = require('multer');
+const app = express();
 app.use(cors());
 
 const firstuser = require('./controllers/firstuser');
@@ -77,7 +78,7 @@ transporter.verify((error, success) => {
 
 
 
-const app = express();
+
 
 // db.select('*').from('utilisateurs').then(data => {
 //   console.log('utilisateurs');
