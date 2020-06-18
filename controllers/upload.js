@@ -12,7 +12,8 @@ const handleUpload = (req,res,db,multer)=> {
   var storage = multer.diskStorage({
         destination: function (req, file, cb) {
           // path='../orientation-files/APP/'+Date.now()+req.body.title;
-          const path2=path.join(process.env.CLOUDCUBE_URL,'APP',Date.now()+req.body.title);
+          // const path2=path.join(process.env.CLOUDCUBE_URL,'APP',Date.now()+req.body.title);
+          const path2= process.env.CLOUDCUBE_URL +'/APP/'+Date.now()+req.body.title);
           console.log(path2);
           fs.mkdirSync(path2, { recursive: true });
 
