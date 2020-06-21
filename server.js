@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
+const AWS = require('aws-sdk');
 const cors = require('cors');
-const multer = require('multer');
 const app = express();
 app.use(cors());
 
@@ -46,10 +46,6 @@ const db = require('knex')({
   connection: {
     connectionString : process.env.DATABASE_URL,
     ssl: true
-    // host : '127.0.0.1',
-    // user : 'karlus',
-    // password : 'pass',
-    // database : 'orientation-data'
   }
 });
 
@@ -77,7 +73,11 @@ transporter.verify((error, success) => {
 });
 
 
-
+//configuring the AWS environment
+AWS.config.update({
+    accessKeyId: process.env.CLOUDCUBE_ACCESS_KEY_ID,
+    secretAccessKey: process.env.CLOUDCUBE_SECRET_ACCESS_KEY
+  });
 
 
 // db.select('*').from('utilisateurs').then(data => {
@@ -159,7 +159,7 @@ app.post('/cancelrequest', cors(corsOptions), (req,res) => {cancelrequest.handle
 app.post('/resetpassword', cors(corsOptions), (req,res) => {resetpassword.handleResetPassword(req,res, db, bcrypt)})
 app.post('/send', cors(corsOptions), (req,res) => {post.handlePost(req,res,transporter)})
 app.post('/checkprofs', cors(corsOptions), (req,res) => {checkprofs.handleCheckProfs(req,res, db)})
-app.post('/upload', cors(corsOptions), (req,res) => {upload.handleUpload(req,res, db, multer)})
+app.post('/upload', cors(corsOptions), (req,res) => {upload.handleUpload(req,res, db, AWS)})
 app.post('/displayfiles', cors(corsOptions), (req,res) => {displayfiles.handleDisplayFiles(req,res, db)})
 app.post('/displayfileseleve', cors(corsOptions), (req,res) => {displayfileseleve.handleDisplayFilesEleve(req,res, db)})
 app.post('/displaycomments', cors(corsOptions), (req,res) => {displaycomments.handleDisplayComments(req,res, db)})

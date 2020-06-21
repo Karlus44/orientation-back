@@ -1,55 +1,62 @@
 const fs = require('fs');
 const path = require('path');
+const multiparty = require("multiparty");
 
 
-const handleUpload = (req,res,db,multer)=> {
+const handleUpload = (req,res,db, AWS)=> {
   console.log('upload');
   // const { body } = req.body.title;
-  console.log(req.headers);
+
+ var title='';
+ var mail='';
+ var auteur='';
+ var lien='';
+ var description='';
+ var file={};
 
 
+ let form = new multiparty.Form();
+  form.parse(req, function(err, fields, files) {
+      console.log(err);
+      mail=fields.mail[0];
+      auteur=fields.author[0];
+      description=fields.desc[0];
+      file=files.file[0];
+      title=fields.title[0] || file.originalFilename;
+      lien=path.join('../orientation-files','APP',Date.now()+title);
+      lienfichier=path.join(lien,title);
+      // fs.mkdirSync(lien, { recursive: true }, err => console.log(err));
 
-  var storage = multer.diskStorage({
-        destination: function (req, file, cb) {
-          // path='../orientation-files/APP/'+Date.now()+req.body.title;
-          // const path2=path.join(process.env.CLOUDCUBE_URL,'APP',Date.now()+req.body.title);
-          const path2= process.env.CLOUDCUBE_URL +'/APP/'+Date.now()+req.body.title;
-          console.log(path2);
-          fs.mkdirSync(path2, { recursive: true });
+console.log(title, mail, auteur, lien, description, file);
 
-          return cb(null,path2)
-      },
-      filename: function (req, file, cb) {
-        // console.log(req.title);
-        cb(null, req.body.title )
-      }
-  });
+  var s3 = new AWS.S3();
+  // var filePath = "./data/file.txt";
 
-  var upload = multer({ storage: storage }).single('file');
+  //configuring parameters
+  var params = {
+    Bucket: 'cloud-cube',
+    Body : fs.createReadStream(file.path),
+    Key : path.join(path.basename(process.env.CLOUDCUBE_URL),'APP',Date.now()+req.body.title)
+  };
 
-  // var upload = multer({ dest: '~/Documents/Projet Orientation/orientation-files/' })
+  s3.upload(params, function (err, data) {
+    //handle error
+    if (err) {
+      console.log("Error", err);
+    }
 
-  upload(req, res, function (err) {
-          if (err instanceof multer.MulterError) {
-              return res.status(500).json(err)
-          } else if (err) {
-              return res.status(500).json(err)
-          }
-     // console.log(req.body);
-     console.log({
-                    auteur: req.body.author,
-                    mail: req.body.mail,
-                    lien: req.file.destination,
-                    nom: req.file.filename,
-                    description: req.body.desc,
-                  });
-     db.insert({
-                    auteur: req.body.author,
-                    mail: req.body.mail,
-                    lien: req.file.destination,
-                    nom: req.file.filename,
-                    description: req.body.desc,
-                  })
+    //success
+    if (data) {
+      console.log("Uploaded in:", data.Location);
+
+
+      db.insert({
+                 nom: title,
+                 mail: mail,
+                 auteur: auteur,
+                 lien: lien,
+                 description: description,
+              })
                   .into('fichiers')
                   .returning('*')
                   // .then(data=> {
@@ -66,6 +73,8 @@ const handleUpload = (req,res,db,multer)=> {
                     message: `Un problème est survenu. Le fichier n'a pu être enregistré dans la base`
                   }))
 
+                }
+              });
 
 
      // return res.status(200).send(req.file,)
