@@ -101,6 +101,7 @@ const handleCopyFolder = (req,res,AWS) => {
             file : {doc: doc, student: student},
             message: 'Répertoire copié'
           })
+      });
 
 }
 
