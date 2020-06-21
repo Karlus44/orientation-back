@@ -23,8 +23,8 @@ const handleUpload = (req,res,db, AWS)=> {
       description=fields.desc[0];
       file=files.file[0];
       title=fields.title[0] || file.originalFilename;
-      lien=path.join('../orientation-files','APP',Date.now()+title);
-      lienfichier=path.join(lien,title);
+      lien=path.join('APP',Date.now()+title);
+      // lienfichier=path.join(lien,title);
       // fs.mkdirSync(lien, { recursive: true }, err => console.log(err));
 
 console.log(title, mail, auteur, lien, description, file);
@@ -36,7 +36,7 @@ console.log(title, mail, auteur, lien, description, file);
   var params = {
     Bucket: 'cloud-cube',
     Body : fs.createReadStream(file.path),
-    Key : path.join(path.basename(process.env.CLOUDCUBE_URL),'APP',Date.now()+title)
+    Key : path.join(path.basename(process.env.CLOUDCUBE_URL),'APP',Date.now()+title,title)
   };
 
   s3.upload(params, function (err, data) {
