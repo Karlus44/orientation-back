@@ -36,7 +36,7 @@ console.log(title, mail, auteur, lien, description, file);
   var params = {
     Bucket: 'cloud-cube',
     Body : fs.createReadStream(file.path),
-    Key : path.join(path.basename(process.env.CLOUDCUBE_URL),'APP',Date.now()+req.body.title)
+    Key : path.join(path.basename(process.env.CLOUDCUBE_URL),'APP',Date.now()+title)
   };
 
   s3.upload(params, function (err, data) {
