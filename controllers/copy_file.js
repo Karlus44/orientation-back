@@ -83,7 +83,8 @@ const handleCopyFolder = async (req,res,AWS) => {
         Prefix: doc
     };
 
-    const listedObjects = await s3.listObjectsV2(listParams).promise();
+    const listedObjects = await s3.listObjectsV2(listParams).promise()
+    .catch(err => console.log(err));
 
     const source = listedObjects[0];
     const nom = path.basename(source);
