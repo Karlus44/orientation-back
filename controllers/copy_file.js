@@ -83,18 +83,18 @@ const handleCopyFolder = async (req,res,db,AWS) => {
         Prefix: doc
     };
 
-    const listedObjects = await s3.listObjectsV2(listParams).promise()
-    .catch(err => console.log(err));
-
-    const source = listedObjects[0];
-    const nom = path.basename(source);
-    console.log('source:', source, 'nom: ', nom);
-  // db.select('*').from('fichiers').where({ lien: doc })
-  //     .then(file => file[0].nom)
-  //     .then(nom => {
+    // const listedObjects = await s3.listObjectsV2(listParams).promise()
+    // .catch(err => console.log(err));
+    //
+    // const source = listedObjects[0];
+    // const nom = path.basename(source);
+    // console.log('source:', source, 'nom: ', nom);
+  db.select('*').from('fichiers').where({ lien: doc })
+      .then(file => file[0].nom)
+      .then(nom => {
 
  console.log(doc, nom);
- // const source = path.join(doc,nom);
+ const source = path.join(doc,nom);
  console.log(source);
 
   //configuring parameters
@@ -121,7 +121,7 @@ const handleCopyFolder = async (req,res,db,AWS) => {
             message: 'Répertoire copié'
           })
         }
-      // });
+      });
     })
     .catch(err => res.json({
       status:'e',
