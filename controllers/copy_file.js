@@ -90,9 +90,10 @@ const handleCopyFolder = (req,res,db,AWS) => {
   //   const nom = path.basename(source);
   //   console.log('source:', source, 'nom: ', nom);
   db.select('*').from('fichiers').where({ lien: doc })
-      .then(file => {console.log(file); return file[0].nom})
+      .then(file => file[0].nom)
       .then(nom => {
- const source = join.path(lien,nom);
+
+ const source = path.join(lien,nom);
  console.log(source);
 
   //configuring parameters
