@@ -46,7 +46,7 @@ db.select('*').from('utilisateurs').where('mail','=',student).returning('*').the
 
   }
 
-const handleCopyFolder = (req,res,AWS) => {
+const handleCopyFolder = (req,res,db,AWS) => {
   const { doc, student } = req.body;
   console.log('copy_folder');
   console.log(doc, student);
