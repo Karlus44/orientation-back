@@ -93,7 +93,8 @@ const handleCopyFolder = (req,res,db,AWS) => {
       .then(file => file[0].nom)
       .then(nom => {
 
- const source = path.join(lien,nom);
+ console.log(doc, nom);
+ const source = path.join(doc,nom);
  console.log(source);
 
   //configuring parameters
