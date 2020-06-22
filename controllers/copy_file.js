@@ -46,12 +46,12 @@ db.select('*').from('utilisateurs').where('mail','=',student).returning('*').the
 
   }
 
-const handleCopyFolder = async (req,res,AWS) => {
+const handleCopyFolder = (req,res,AWS) => {
   const { doc, student } = req.body;
   console.log('copy_folder');
   console.log(doc, student);
   const split=doc.split('/');
-  const lien_racine = split.join(path.sep)+path.sep+student;
+  // const lien_racine = split.join(path.sep)+path.sep+student;
   const lien_eleve = split.map((value,index)=>{if (index===0) {return student} else {return value}}).join(path.sep);
   // const nom = split[split.length-1]
 
@@ -78,18 +78,22 @@ const handleCopyFolder = async (req,res,AWS) => {
 
   var s3 = new AWS.S3();
 
-  const listParams = {
-        Bucket: 'cloud-cube',
-        Prefix: doc
-    };
-
-    const listedObjects = await s3.listObjectsV2(listParams).promise()
-    .catch(err => console.log(err));
-
-    const source = listedObjects[0];
-    const nom = path.basename(source);
-    console.log('source:', source, 'nom: ', nom);
-
+  // const listParams = {
+  //       Bucket: 'cloud-cube',
+  //       Prefix: doc
+  //   };
+  //
+  //   const listedObjects = await s3.listObjectsV2(listParams).promise()
+  //   .catch(err => console.log(err));
+  //
+  //   const source = listedObjects[0];
+  //   const nom = path.basename(source);
+  //   console.log('source:', source, 'nom: ', nom);
+  db.select('*').from('fichiers').where({ lien: doc })
+      .then(file => file[0].nom)
+      .then(nom => {
+ const source = join.path(lien,nom);
+ console.log(source);
 
   //configuring parameters
   var params = {
@@ -116,6 +120,12 @@ const handleCopyFolder = async (req,res,AWS) => {
           })
         }
       });
+    })
+    .catch(err => res.json({
+      status:'e',
+      file : {doc: doc, student: student},
+      message: 'Un problème est survenu'
+    }))
 
 }
 
