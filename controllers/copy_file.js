@@ -5,7 +5,7 @@ const path = require('path');
   const { doc, student, auteur } = req.body;
   console.log('copy_file')
   // console.log(doc, student);
-  const lien_eleve = doc.split(path.sep).map((value,index)=>{if (index===0) {return student} else {return value}}).join(path.sep)
+  const lien_eleve = doc.split(path.sep).map((value,index)=>{if (index===1) {return student} else {return value}}).join(path.sep)
   // console.log(doc, lien_eleve);
 
   if (!doc || !student) {
@@ -52,7 +52,7 @@ const handleCopyFolder = (req,res,db,AWS) => {
   console.log(doc, student);
   const split=doc.split('/');
   // const lien_racine = split.join(path.sep)+path.sep+student;
-  const lien_eleve = split.map((value,index)=>{if (index===0) {return student} else {return value}}).join(path.sep);
+  const lien_eleve = split.map((value,index)=>{if (index===1) {return student} else {return value}}).join(path.sep);
   // const nom = split[split.length-1]
 
   // nom = fs.readdirSync(doc, (err) => {
@@ -78,20 +78,20 @@ const handleCopyFolder = (req,res,db,AWS) => {
 
   var s3 = new AWS.S3();
 
-  // const listParams = {
-  //       Bucket: 'cloud-cube',
-  //       Prefix: doc
-  //   };
-  //
-  //   const listedObjects = await s3.listObjectsV2(listParams).promise()
-  //   .catch(err => console.log(err));
-  //
-  //   const source = listedObjects[0];
-  //   const nom = path.basename(source);
-  //   console.log('source:', source, 'nom: ', nom);
-  db.select('*').from('fichiers').where({ lien: doc })
-      .then(file => file[0].nom)
-      .then(nom => {
+  const listParams = {
+        Bucket: 'cloud-cube',
+        Prefix: doc
+    };
+
+    const listedObjects = await s3.listObjectsV2(listParams).promise()
+    .catch(err => console.log(err));
+
+    const source = listedObjects[0];
+    const nom = path.basename(source);
+    console.log('source:', source, 'nom: ', nom);
+  // db.select('*').from('fichiers').where({ lien: doc })
+  //     .then(file => file[0].nom)
+  //     .then(nom => {
 
  console.log(doc, nom);
  const source = path.join(doc,nom);
@@ -121,7 +121,7 @@ const handleCopyFolder = (req,res,db,AWS) => {
             message: 'Répertoire copié'
           })
         }
-      });
+      // });
     })
     .catch(err => res.json({
       status:'e',
