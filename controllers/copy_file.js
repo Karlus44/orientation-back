@@ -46,7 +46,7 @@ db.select('*').from('utilisateurs').where('mail','=',student).returning('*').the
 
   }
 
-const handleCopyFolder = (req,res,AWS) => {
+const handleCopyFolder = async (req,res,AWS) => {
   const { doc, student } = req.body;
   console.log('copy_folder');
   console.log(doc, student);
@@ -55,10 +55,10 @@ const handleCopyFolder = (req,res,AWS) => {
   const lien_eleve = split.map((value,index)=>{if (index===0) {return student} else {return value}}).join(path.sep);
   // const nom = split[split.length-1]
 
-  nom = fs.readdirSync(doc, (err) => {
-                            if (err) console.log(err);
-                            console.log(lien_racine + ' was created');
-                          })
+  // nom = fs.readdirSync(doc, (err) => {
+  //                           if (err) console.log(err);
+  //                           console.log(lien_racine + ' was created');
+  //                         })
 
 
   // fs.mkdirSync(lien_eleve, { recursive: true }, (err) => {
@@ -78,11 +78,23 @@ const handleCopyFolder = (req,res,AWS) => {
 
   var s3 = new AWS.S3();
 
+  const listParams = {
+        Bucket: 'cloud-cube',
+        Prefix: doc
+    };
+
+    const listedObjects = await s3.listObjectsV2(listParams).promise();
+
+    const source = listedObjects[0];
+    const nom = path.basename(source);
+    console.log('source:', source, 'nom: ', nom);
+
+
   //configuring parameters
   var params = {
     Bucket: 'cloud-cube',
-    Body : fs.createReadStream(path.join(doc,nom[0])),
-    Key : path.join(path.basename(process.env.CLOUDCUBE_URL),student,Date.now()+nom[0],nom[0])
+    Body : fs.createReadStream(source),
+    Key : path.join(path.basename(process.env.CLOUDCUBE_URL),student,Date.now()+nom,nom)
   };
 
   s3.upload(params, function (err, data) {
