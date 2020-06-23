@@ -43,8 +43,9 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
       params.Delete.Objects.push({Key:path.join(item.lien_eleve,item.nom)});
     })
     }
+    return params
     )
-    .then(
+    .then( params =>{
     console.log(params);
     db('login').where({ user: mail }).del()
     .then( user => {
@@ -57,6 +58,7 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
       })
       }
     )
+    }
   )
 }
   })
