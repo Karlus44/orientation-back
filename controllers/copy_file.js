@@ -105,7 +105,7 @@ const handleCopyFolder = async (req,res,db,AWS) => {
 
    response.on('data', (stream) => {
 
-
+  console.log('DATA')
   //configuring parameters
   var params = {
     Bucket: 'cloud-cube',
@@ -117,6 +117,11 @@ const handleCopyFolder = async (req,res,db,AWS) => {
     //handle error
     if (err) {
       console.log("Error", err);
+      res.json({
+        status:'e',
+        file : {doc: doc, student: student},
+        message: 'Un problème est survenu'
+      });
     }
 
     //success
