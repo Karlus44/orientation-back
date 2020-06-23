@@ -62,7 +62,7 @@ const handleDeleteFolder = (req,res,AWS) => {
   var s3 = new AWS.S3();
   var params = {
         Bucket : 'cloud-cube',
-        Key : path.join(lien,nom)
+        Key : path.join(path.basename(process.env.CLOUDCUBE_URL),lien,nom)
 };
   s3.deleteObject(params,function(err,data){
           if (err)    console.log(err);
