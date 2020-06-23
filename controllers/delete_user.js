@@ -38,9 +38,11 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
       Bucket : 'cloud-cube',
       Delete: {Objects: [   ] }
     };
-    db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(liste.forEach((item) => {
-      params.Delete.Objects.push({Key:path.join(item.lien_eleve,item.nom)})
-    });
+    db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(liste => {liste.forEach((item) => {
+      console.log(item);
+      params.Delete.Objects.push({Key:path.join(item.lien_eleve,item.nom)});
+    })
+    }
     )
     .then(
     console.log(params);
