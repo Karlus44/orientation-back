@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const http = require('http');
+const https = require('https');
 
  const handleCopyFile = (req,res, db)=> {
   const { doc, student, auteur } = req.body;
@@ -99,7 +99,7 @@ const handleCopyFolder = async (req,res,db,AWS) => {
  console.log(source);
 
 
- var req = http.request(source);
+ var req = https.request(source);
  req.end();
  req.on('response', function(stream) {
 
