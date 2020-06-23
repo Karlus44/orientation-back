@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
  const handleDeleteFile = (req,res, db)=> {
   const { user, lien, nom } = req.body;
@@ -44,21 +45,29 @@ db.select('*').from('fichiers').where('lien','=',lien).then(
 
 }
 
-const handleDeleteFolder = (req,res) => {
+const handleDeleteFolder = (req,res,AWS) => {
   const { user, lien, nom } = req.body;
   console.log('delete_folder');
   console.log(user, lien, nom);
-  file= lien+'/'+nom;
+  // file= lien+'/'+nom;
 
-  fs.unlinkSync(file, (err) => {
-                            if (err) console.log(err);
-                            console.log(file + ' was deleted');
-                          });
-  fs.rmdirSync(lien, (err) => {
-                            if (err) console.log(err);
-                            console.log(lien + ' was deleted');
-                          })
-  // fs.removeSync(lien);
+  // fs.unlinkSync(file, (err) => {
+  //                           if (err) console.log(err);
+  //                           console.log(file + ' was deleted');
+  //                         });
+  // fs.rmdirSync(lien, (err) => {
+  //                           if (err) console.log(err);
+  //                           console.log(lien + ' was deleted');
+  //                         })
+  var s3 = new AWS.S3();
+  var params = {
+        Bucket : 'cloud-cube',
+        Key : path.join(lien,nom)
+};
+  s3.deleteObject(params,function(err,data){
+          if (err)    console.log(err);
+          else        console.log(file + ' was deleted');
+      })
 
 }
 
