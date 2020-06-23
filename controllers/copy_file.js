@@ -109,7 +109,7 @@ const handleCopyFolder = async (req,res,db,AWS) => {
   //configuring parameters
   var params = {
     Bucket: 'cloud-cube',
-    Body : fs.createReadStream(stream),
+    Body : fs.createReadStream(d),
     Key : path.join(path.basename(process.env.CLOUDCUBE_URL),student,Date.now()+nom,nom)
   };
 
