@@ -3,7 +3,7 @@ const handleSyntheseFiles = (req,res,db)=> {
   const { list } = req.body;
   // console.log(list);
 
-  var list2 = Object.keys(list).filter(z=>list[z]).map(z=> '../orientation-files/'+z+'/');
+  var list2 = Object.keys(list).filter(z=>list[z]).map(z=> 'public/'+z+'/');
   // console.log(list2);
   var obj={};
 

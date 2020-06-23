@@ -7,7 +7,7 @@ const handleDisplayFilesEleve = async (req,res,db)=> {
   db('partages')
     .join('fichiers', 'partages.lien', '=', 'fichiers.lien')
     .select('*')
-    .where('partages.lien_eleve', 'like', `../orientation-files/${mail}/%`)
+    .where('partages.lien_eleve', 'like', `public/${mail}/%`)
     .then(x=>res.json(x))
     .catch(err => res.status(400).json(err))
 
