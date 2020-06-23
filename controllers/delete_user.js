@@ -64,10 +64,7 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
     })
   })
   }
-}
-)
 
-}
 
 module.exports = {
   handleDeleteUser: handleDeleteUser
