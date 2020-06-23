@@ -99,7 +99,7 @@ const handleCopyFolder = async (req,res,db,AWS) => {
  console.log(source);
 
 
- const req = https.request(source, (response) => {
+ const req = https.get(source, (response) => {
    console.log('statusCode:', response.statusCode);
    console.log('headers:', response.headers);
    var body='';
