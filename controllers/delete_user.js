@@ -53,6 +53,7 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
       }
     )
   )
+}
   })
     .catch(err => {
       console.log(err);
