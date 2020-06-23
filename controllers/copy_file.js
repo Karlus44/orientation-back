@@ -115,7 +115,7 @@ const handleCopyFolder = async (req,res,db,AWS) => {
     Bucket: 'cloud-cube',
     Body : body,
     // Body : fs.createReadStream(body),
-    Key : path.join(path.basename(process.env.CLOUDCUBE_URL),student,Date.now()+nom,nom)
+    Key : path.join(path.basename(process.env.CLOUDCUBE_URL),'public',student,Date.now()+nom,nom)
   };
 
   s3.upload(params, function (err, data) {
