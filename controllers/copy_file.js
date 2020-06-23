@@ -109,7 +109,6 @@ const handleCopyFolder = async (req,res,db,AWS) => {
      body += chunk;
    });
    response.on('end', function() {
-  process.stdout.write(d);
   console.log('DATA')
   //configuring parameters
   var params = {
