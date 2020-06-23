@@ -2,7 +2,7 @@ const rimraf = require("rimraf");
 const path = require('path');
 // const fs = require('fs');
 
- const handleDeleteUser = (req,res, db, AWS)=> {
+ const handleDeleteUser = async (req,res, db, AWS)=> {
   const { admin, mail } = req.body;
   console.log('delete_user')
   console.log(mail);
@@ -47,13 +47,13 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
     )
     .then( x =>{
     console.log(params);
-    s3.deleteObjects(params, function(err, data) {
+    await s3.deleteObjects(params, function(err, data) {
    if (err) console.log(err, err.stack);
    else     console.log(data);
 
  })
- .then(x => {
-   
+ // .then(x => {
+
     db('login').where({ user: mail }).del()
     .then( user => {
         res.json({
@@ -62,8 +62,8 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
         message: 'Utilisateur effacé de la base'
           })
         })
-      }
-    )
+    //   }
+    // )
     }
   )
 }
