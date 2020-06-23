@@ -1,4 +1,5 @@
 const rimraf = require("rimraf");
+const path = require('path');
 // const fs = require('fs');
 
  const handleDeleteUser = (req,res, db, AWS)=> {
@@ -37,10 +38,12 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
       Bucket : 'cloud-cube',
       Delete: {Objects: [   ] }
     };
-    db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(x=>console.log(x))
-    // params.Delete.Objects.push({Key:'key'})
+    db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(liste.forEach((item) => {
+      params.Delete.Objects.push({Key:path.join(item.lien_eleve,item.nom)})
+    });
+    )
     .then(
-
+    console.log(params);
     db('login').where({ user: mail }).del()
     .then( user => {
 
