@@ -23,7 +23,7 @@ const handleUpload = (req,res,db, AWS)=> {
       description=fields.desc[0];
       file=files.file[0];
       title=fields.title[0] || file.originalFilename;
-      lien=path.join('APP',Date.now()+title);
+      lien=path.join('public','APP',Date.now()+title);
       // lienfichier=path.join(lien,title);
       // fs.mkdirSync(lien, { recursive: true }, err => console.log(err));
 
