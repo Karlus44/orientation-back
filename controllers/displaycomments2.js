@@ -8,7 +8,7 @@ const handleDisplayComments2 = async (req,res,db)=> {
 
 
 let mySet = new Set()
-var partages = await db('partages').where('lien_eleve', 'like', `../orientation-files/${link}/%`);
+var partages = await db('partages').where('lien_eleve', 'like', `public/${link}/%`);
 console.log(partages);
 var commentaires= await Promise.all(partages.map(async x => db('commentaires').where({file: x.id,type: 'd'}).orderBy('created_at', 'asc')));
 console.log(commentaires);
