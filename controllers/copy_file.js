@@ -99,9 +99,12 @@ const handleCopyFolder = async (req,res,db,AWS) => {
  console.log(source);
 
 
- var req = https.request(source);
- req.end();
- req.on('response', function(stream) {
+ const req = https.request(source, (response) => {
+   console.log('statusCode:', response.statusCode);
+   console.log('headers:', response.headers);
+
+   response.on('data', (stream) => {
+
 
   //configuring parameters
   var params = {
@@ -125,26 +128,27 @@ const handleCopyFolder = async (req,res,db,AWS) => {
             status:'c',
             file : {doc: doc, student: student},
             message: 'Répertoire copié'
-          })
-        }
-      });
-    })
-    .catch(err => res.json({
-      status:'e',
-      file : {doc: doc, student: student},
-      message: 'Un problème est survenu'
-    }))
+            })
+          }
+        });
+      })
 
-  })
-  .catch(err => {
-    console.log(err);
-    res.json({
-    status:'e',
-    file : {doc: doc, student: student},
-    message: 'Un problème est survenu'
+
+    })
+
+    req.on('error', (e) => {
+      console.error(e);
+      res.json({
+        status:'e',
+        file : {doc: doc, student: student},
+        message: 'Un problème est survenu'
+      });
+    });
+    req.end();
   });
-  }
-)
+
+
+
 
 }
 
