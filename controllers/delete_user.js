@@ -40,21 +40,28 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
     };
     db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(liste => {liste.forEach((item) => {
       console.log(item);
+      console.log(path.join(item.lien_eleve,item.nom));
       params.Delete.Objects.push({Key:path.join(item.lien_eleve,item.nom)});
     })
     }
     )
     .then( x =>{
     console.log(params);
+    s3.deleteObjects(params, function(err, data) {
+   if (err) console.log(err, err.stack);
+   else     console.log(data);
+
+ })
+ .then(x => {
+   
     db('login').where({ user: mail }).del()
     .then( user => {
-
-
         res.json({
         status:'d',
         user : {mail: mail},
         message: 'Utilisateur effacé de la base'
-      })
+          })
+        })
       }
     )
     }
