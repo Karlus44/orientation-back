@@ -136,12 +136,16 @@ const handleCopyFolder = async (req,res,db,AWS) => {
     }))
 
   })
-  .catch(err => res.json({
+  .catch(err => {
+    console.log(err);
+    res.json({
     status:'e',
     file : {doc: doc, student: student},
     message: 'Un problème est survenu'
-  }))
-  
+  });
+  }
+)
+
 }
 
 module.exports = {
