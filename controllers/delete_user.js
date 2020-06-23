@@ -29,27 +29,30 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
       message: 'Vous ne pouvez pas supprimer un administrateur'
     })
   } else {
+
+
+    // rimraf.sync('../orientation-files/'+mail);
+    var s3 = new AWS.S3();
+    var params = {
+      Bucket : 'cloud-cube',
+      Delete: {Objects: [   ] }
+    };
+    db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(x=>console.log(x))
+    // params.Delete.Objects.push({Key:'key'})
+    .then(
+
     db('login').where({ user: mail }).del()
     .then( user => {
 
-      // rimraf.sync('../orientation-files/'+mail);
-      var s3 = new AWS.S3();
-      var params = {
-            Bucket : 'cloud-cube',
-            Delete: {Objects: [   ] }
-          };
-      db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(x=>console.log(x))
-// params.Delete.Objects.push({Key:'key'})
-  .then(
 
         res.json({
         status:'d',
         user : {mail: mail},
         message: 'Utilisateur effacé de la base'
       })
+      }
     )
-      // }
-  // )
+  )
   })
     .catch(err => {
       console.log(err);
