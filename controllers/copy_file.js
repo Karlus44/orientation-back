@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
 
  const handleCopyFile = (req,res, db)=> {
   const { doc, student, auteur } = req.body;
@@ -97,10 +98,15 @@ const handleCopyFolder = async (req,res,db,AWS) => {
  const source = path.join(process.env.CLOUDCUBE_URL,doc,nom);
  console.log(source);
 
+
+ var req = http.request(source);
+ req.end();
+ req.on('response', function(stream) {
+
   //configuring parameters
   var params = {
     Bucket: 'cloud-cube',
-    Body : fs.createReadStream(source),
+    Body : fs.createReadStream(stream),
     Key : path.join(path.basename(process.env.CLOUDCUBE_URL),student,Date.now()+nom,nom)
   };
 
@@ -129,6 +135,13 @@ const handleCopyFolder = async (req,res,db,AWS) => {
       message: 'Un problème est survenu'
     }))
 
+  })
+  .catch(err => res.json({
+    status:'e',
+    file : {doc: doc, student: student},
+    message: 'Un problème est survenu'
+  }))
+  
 }
 
 module.exports = {
