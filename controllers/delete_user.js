@@ -1,7 +1,7 @@
 const rimraf = require("rimraf");
 // const fs = require('fs');
 
- const handleDeleteUser = (req,res, db)=> {
+ const handleDeleteUser = (req,res, db, AWS)=> {
   const { admin, mail } = req.body;
   console.log('delete_user')
   console.log(mail);
@@ -31,17 +31,23 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
   } else {
     db('login').where({ user: mail }).del()
     .then( user => {
-      // console.log('../orientation-files/'+mail);
-      // console.log(fs.readdirSync('../orientation-files/'+mail));
-      rimraf.sync('../orientation-files/'+mail);
-      // rimraf('../orientation-files/'+mail, function (err) { console.log(err); })
-      // .then(
-        // x => {
+
+      // rimraf.sync('../orientation-files/'+mail);
+      var s3 = new AWS.S3();
+      var params = {
+            Bucket : 'cloud-cube',
+            Delete: {Objects: [   ] }
+          };
+      db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(x=>console.log(x))
+// params.Delete.Objects.push({Key:'key'})
+  .then(
+
         res.json({
         status:'d',
         user : {mail: mail},
         message: 'Utilisateur effacé de la base'
       })
+    )
       // }
   // )
   })
