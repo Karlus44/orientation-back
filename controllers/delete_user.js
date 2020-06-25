@@ -51,8 +51,9 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
    if (err) console.log(err, err.stack);
    else     console.log(data);
 
+  })
  })
- .then(y => {
+ .then(x => {
 
     db('login').where({ user: mail }).del()
     .then( user => {
@@ -62,10 +63,7 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
         message: 'Utilisateur effacé de la base'
           })
         })
-    //   }
-    // )
-    }
-  )
+
   })
     .catch(err => {
       console.log(err);
