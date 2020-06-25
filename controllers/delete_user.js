@@ -52,7 +52,7 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
    else     console.log(data);
 
  })
- .then(x => {
+ .then(y => {
 
     db('login').where({ user: mail }).del()
     .then( user => {
@@ -66,7 +66,6 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
     // )
     }
   )
-}
   })
     .catch(err => {
       console.log(err);
@@ -77,7 +76,9 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
     })
   })
   }
-
+}
+)
+}
 
 module.exports = {
   handleDeleteUser: handleDeleteUser
