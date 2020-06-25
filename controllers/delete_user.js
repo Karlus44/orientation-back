@@ -21,7 +21,7 @@ const path = require('path');
     });
   }
 
-db.select('admin').from('utilisateurs').where('mail','=',mail).then(
+await db.select('admin').from('utilisateurs').where('mail','=',mail).then(
   x => { console.log(x);
     if (x[0].admin) {
     res.status(400).json({
@@ -38,7 +38,7 @@ db.select('admin').from('utilisateurs').where('mail','=',mail).then(
       Bucket : 'cloud-cube',
       Delete: {Objects: [   ] }
     };
-    db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(liste => {liste.forEach((item) => {
+    await db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(async liste => {liste.forEach((item) => {
       console.log(item);
       console.log(path.join(item.lien_eleve,item.nom));
       params.Delete.Objects.push({Key:path.join(item.lien_eleve,item.nom)});
