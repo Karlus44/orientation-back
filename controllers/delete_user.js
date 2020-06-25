@@ -2,7 +2,7 @@ const rimraf = require("rimraf");
 const path = require('path');
 // const fs = require('fs');
 
- const handleDeleteUser = async (req,res, db, AWS)=> {
+ const handleDeleteUser = (req,res, db, AWS)=> {
   const { admin, mail } = req.body;
   console.log('delete_user')
   console.log(mail);
@@ -21,7 +21,7 @@ const path = require('path');
     });
   }
 
-await db.select('admin').from('utilisateurs').where('mail','=',mail).then(
+db.select('admin').from('utilisateurs').where('mail','=',mail).then(
   x => { console.log(x);
     if (x[0].admin) {
     res.status(400).json({
@@ -38,7 +38,7 @@ await db.select('admin').from('utilisateurs').where('mail','=',mail).then(
       Bucket : 'cloud-cube',
       Delete: {Objects: [   ] }
     };
-    await db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(async liste => {liste.forEach((item) => {
+    db('partages').where('lien_eleve', 'like', `public/${mail}/%`).then(liste => {liste.forEach((item) => {
       console.log(item);
       console.log(path.join(item.lien_eleve,item.nom));
       params.Delete.Objects.push({Key:path.join(item.lien_eleve,item.nom)});
@@ -47,12 +47,12 @@ await db.select('admin').from('utilisateurs').where('mail','=',mail).then(
     )
     .then( x =>{
     console.log(params);
-    var response = await s3.deleteObjects(params, function(err, data) {
+    s3.deleteObjects(params, function(err, data) {
    if (err) console.log(err, err.stack);
    else     console.log(data);
 
  })
- // .then(x => {
+ .then(x => {
 
     db('login').where({ user: mail }).del()
     .then( user => {
