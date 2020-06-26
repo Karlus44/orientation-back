@@ -7,7 +7,7 @@ Il est possible d'essayer ce projet ici: https://orientation-front.herokuapp.com
 
 Voici un compte professeur: yoda@gmail.com , mot de passe: yoda
 
-Voici un compte élève: luke.skywalker.com , mot de passe: luke
+Voici un compte élève: luke.skywalker@gmail.com , mot de passe: luke
 
 Un compte administrateur provisoire peut vous être envoyé sur demande de votre part ici: charles.havez@gmail.com
 
