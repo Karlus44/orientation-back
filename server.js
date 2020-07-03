@@ -1,9 +1,9 @@
 const express = require('express');
+const app = express();
 const bcrypt = require('bcrypt-nodejs');
 const AWS = require('aws-sdk');
 const cors = require('cors');
-const app = express();
-app.use(cors());
+
 
 const firstuser = require('./controllers/firstuser');
 const register = require('./controllers/register');
@@ -88,6 +88,7 @@ AWS.config.update({
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 var corsOptions = {
   origin: 'https://orientation-front.herokuapp.com',
